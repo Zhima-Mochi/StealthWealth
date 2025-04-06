@@ -4,7 +4,7 @@
 
 namespace PriceService {
 
-    export const Currencies = new Set<string>(["TWD", "USD"]);
+    export const Currencies = new Set<string>(["TWD", "USD", "HKD", "CNY", "JPY", "EUR", "GBP", "AUD", "CAD", "CHF", "NZD", "RUB", "INR", "MXN", "ZAR", "BRL", "ARS", "CLP", "COP", "PEN", "UYU", "PYG", "UFX", "VND", "PHP", "IDR", "THB", "MYR", "KRW", "SGD", "NOK", "SEK", "DKK", "ISK", "RSD", "RON", "BGN", "TRY", "BAM", "AZN", "MDL", "GEL", "AMD", "KZT", "KGS", "TJS", "TMT", "UZS", "BYN", "KRW", "XDR", "XAG", "XAU"]);
 
     declare const UrlFetchApp: {
         fetch(url: string, params?: any): {

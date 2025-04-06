@@ -77,10 +77,9 @@ namespace Repo {
 
     const headers = SheetConfig.sheetsConfig['Allocation'].headers;
     const rows = sheet.getDataRange().getValues().slice(1);
-    rows.forEach(row => {
-      const allocation = rowToData(row, headers) as AllocationService.Allocation;
-      const index = allocations.findIndex(a => a.Ticker === allocation.Ticker);
-      if (index !== -1) {
+    rows.forEach((row, index) => {
+      const allocation = allocations.find(a => a.Ticker === row[0]);
+      if (allocation) {
         rows[index] = dataToRow(allocation, headers);
       }
     });

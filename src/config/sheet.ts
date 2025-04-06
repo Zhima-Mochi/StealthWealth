@@ -33,8 +33,8 @@ namespace SheetConfig {
       formats: ["TEXT", "PERCENTAGE"]
     },
     "Actions": {
-      headers: ["Ticker", "Action", "Quantity", "Current Value", "Target Value", "Current Price"],
-      formats: ["TEXT", "TEXT", "QUANTITY", "CURRENCY", "CURRENCY", "CURRENCY"]
+      headers: ["Ticker", "Action", "Currency", "Quantity", "Current Value", "Target Value", "Current Price"],
+      formats: ["TEXT", "TEXT", "TEXT", "QUANTITY", "CURRENCY", "CURRENCY", "CURRENCY"]
     }
   };
 
