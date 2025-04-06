@@ -1,5 +1,7 @@
 # 📈 StealthWealth Rebalancer – Google Sheets Add-on
 
+![Stealth Wealth Logo](./assets/logo.png)
+
 The **StealthWealth Rebalancer** is a powerful, scriptable, and modular **portfolio rebalancing tool** built with **Google Apps Script** (written in TypeScript). This tool seamlessly integrates with **Google Sheets** to help you manage your assets, automatically calculate rebalance actions based on your target allocations, and send **email notifications** for important updates.
 
 Designed for investors seeking **visibility, automation, and control**, the StealthWealth Rebalancer empowers you to make informed decisions directly within Google Sheets.
