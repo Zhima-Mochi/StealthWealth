@@ -7,16 +7,15 @@
 /// <reference path="./core/allocation.service.ts" />
 /// <reference path="./core/action.service.ts" />
 /// <reference path="./core/notify.service.ts" />
-function Rebalance() {
+function Rebalance(): ActionService.Action[] {
     const assets = AssetService.GetAssets();
-    AllocationService.SetAssetInAllocation(assets);    
+    AllocationService.SetAssetInAllocation(assets);
     AllocationService.NormalizeAllocations();
     const allocations = AllocationService.GetAllocations();
     const actions = RebalanceService.Rebalance(assets, allocations);
     RebalanceService.Print(actions);
     ActionService.RenewActions(actions);
 
-    NotifyService.SendEmail(actions);
     return actions;
 }
 
@@ -26,6 +25,13 @@ function Initialize() {
     });
     AssetService.AddCurrencyAsset("TWD");
     AssetService.AddCurrencyAsset("USD");
+}
+
+function Notify() {
+    const actions = ActionService.GetActions();
+    if (actions.length > 0) {
+        NotifyService.SendEmail(actions);
+    }
 }
 
 function DangerouslyDeleteAllData() {
@@ -70,4 +76,20 @@ function DangerouslyAddAssets() {
     sampleAssets.forEach(asset => {
         Repo.AddAsset(asset);
     });
+}
+
+
+function onOpen() {
+    SpreadsheetApp.getUi()
+        .createMenu('📈 StealthWealth Rebalancer')
+        .addItem('🔁 Rebalance Portfolio', 'Rebalance')
+        .addItem('🧰 Initialize Sheets', 'Initialize')
+        .addToUi();
+}
+
+function onHomepage() {
+    const html = HtmlService.createHtmlOutputFromFile('sidebar.html')
+        .setTitle('StealthWealth Rebalancer');
+
+    SpreadsheetApp.getUi().showSidebar(html);
 }
