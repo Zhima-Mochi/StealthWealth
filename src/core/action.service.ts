@@ -14,6 +14,12 @@ namespace ActionService {
 
     export function RenewActions(actions: Action[]): boolean {
         deleteActions();
+        // sort by action
+        actions.sort((a, b) => {
+            if (a.Action === "Buy" && b.Action === "Sell") return -1;
+            if (a.Action === "Sell" && b.Action === "Buy") return 1;
+            return 0;
+        });
         actions.forEach(action => {
             addAction(action);
         });

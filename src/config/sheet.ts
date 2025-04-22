@@ -33,16 +33,16 @@ namespace SheetConfig {
       formats: ["TEXT", "PERCENTAGE"]
     },
     "Actions": {
-      headers: ["Ticker", "Action", "Currency", "Quantity", "Current Value", "Target Value", "Current Price"],
-      formats: ["TEXT", "TEXT", "TEXT", "QUANTITY", "CURRENCY", "CURRENCY", "CURRENCY"]
+      headers: ["Ticker", "Currency", "Current Price", "Action", "Quantity", "Current Value", "Target Value"],
+      formats: ["TEXT", "TEXT", "CURRENCY", "TEXT", "QUANTITY", "CURRENCY", "CURRENCY"]
     }
   };
 
   export const formatTypes: FormatTypes = {
-    QUANTITY: "#,##0.00",
+    QUANTITY: "#,##0.00000",
     TEXT: "@",
-    PERCENTAGE: "0.00%",
-    CURRENCY: "$#,##0.00"
+    PERCENTAGE: "0.0000%",
+    CURRENCY: "$#,##0.0000"
   };
 
   export const sheetStyles: SheetStyles = {

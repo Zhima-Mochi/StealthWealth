@@ -87,9 +87,9 @@ function onOpen() {
         .addToUi();
 }
 
-function onHomepage() {
-    const html = HtmlService.createHtmlOutputFromFile('sidebar.html')
-        .setTitle('StealthWealth Rebalancer');
-
+function openScheduleSidebar() {
+    const html = HtmlService.createHtmlOutputFromFile('schedule')
+        .setTitle('Set Schedule')
+        .setWidth(300);
     SpreadsheetApp.getUi().showSidebar(html);
 }

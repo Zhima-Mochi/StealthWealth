@@ -40,7 +40,8 @@ namespace RebalanceService {
     allocations.forEach(allocation => {
       allocationMap[allocation.Ticker] = allocation.Percentage;
     });
-    const actions = calculate(holdingMap, allocationMap);
+    const totalPortfolioValue = Object.values(holdingMap).reduce((acc, holding) => acc + holding.quantity * holding.currentPrice!, 0);
+    const actions = calculate(holdingMap, allocationMap, totalPortfolioValue * 0.01);
     return actions;
   }
 
@@ -70,20 +71,32 @@ namespace RebalanceService {
       const priceInTWD = currentHoldings[ticker].currentPriceInTWD!;
 
       const diffValueInTWD = targetValueInTWD - currentValueInTWD;
+      const quantityChange = Math.round(diffValueInTWD / priceInTWD);
 
-      if (Math.abs(diffValueInTWD) >= minTradeValue) {
-        const quantityChange = Math.round(diffValueInTWD / priceInTWD);
-        if (quantityChange !== 0) {
+      if (quantityChange === 0) {
+        return;
+      } else if (targetRatio === 0 || quantityChange + currentHoldings[ticker].quantity < 0) {
+        if (currentValueInTWD > 0) {
           actions.push({
             Ticker: ticker,
-            Action: quantityChange > 0 ? "Buy" : "Sell",
+            Action: "Sell",
             Currency: currentHoldings[ticker].currency,
-            Quantity: Math.abs(quantityChange),
+            Quantity: currentHoldings[ticker].quantity,
             CurrentValue: currentValue,
-            TargetValue: (quantityChange + currentHoldings[ticker].quantity) * currentPrice,
+            TargetValue: 0,
             CurrentPrice: currentPrice
           });
         }
+      } else if (Math.abs(quantityChange) * currentPrice >= minTradeValue) {
+        actions.push({
+          Ticker: ticker,
+          Action: quantityChange > 0 ? "Buy" : "Sell",
+          Currency: currentHoldings[ticker].currency,
+          Quantity: Math.abs(quantityChange),
+          CurrentValue: currentValue,
+          TargetValue: (quantityChange + currentHoldings[ticker].quantity) * currentPrice,
+          CurrentPrice: currentPrice
+        });
       }
     });
 
