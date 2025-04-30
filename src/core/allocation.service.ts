@@ -5,6 +5,7 @@ namespace AllocationService {
     export interface Allocation {
         Ticker: string;
         Percentage: number;
+        CurrentPercentage: number;
     }
 
     export function GetAllocations(): Allocation[] {
@@ -18,7 +19,8 @@ namespace AllocationService {
             if (!allocations.some(allocation => allocation.Ticker === asset.Ticker)) {
                 addAllocation({
                     Ticker: asset.Ticker,
-                    Percentage: 0
+                    Percentage: 0,
+                    CurrentPercentage: 0
                 });
             }
         });
@@ -30,6 +32,14 @@ namespace AllocationService {
         if (totalPercentage === 0) {return;}
         allocations.forEach(allocation => {
             allocation.Percentage = allocation.Percentage / totalPercentage;
+        });
+        Repo.UpdateAllocations(allocations);
+    }
+
+    export function SetCurrentPercentage(percentageMap: Map<string, number>): void {
+        const allocations = GetAllocations();
+        allocations.forEach(allocation => {
+            allocation.CurrentPercentage = percentageMap.get(allocation.Ticker) ?? 0;
         });
         Repo.UpdateAllocations(allocations);
     }

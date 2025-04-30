@@ -10,6 +10,7 @@ namespace ActionService {
         CurrentValue: number;
         TargetValue: number;
         CurrentPrice: number;
+        Difference: number;
     }
 
     export function RenewActions(actions: Action[]): boolean {

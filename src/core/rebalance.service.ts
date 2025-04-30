@@ -40,8 +40,7 @@ namespace RebalanceService {
     allocations.forEach(allocation => {
       allocationMap[allocation.Ticker] = allocation.Percentage;
     });
-    const totalPortfolioValue = Object.values(holdingMap).reduce((acc, holding) => acc + holding.quantity * holding.currentPrice!, 0);
-    const actions = calculate(holdingMap, allocationMap, totalPortfolioValue * 0.01);
+    const actions = calculate(holdingMap, allocationMap, 0.02);
     return actions;
   }
 
@@ -52,9 +51,10 @@ namespace RebalanceService {
   function calculate(
     holdingMap: HoldingMap,
     allocationMap: AllocationMap,
-    minTradeValue: number = 1
+    minTradePercentage: number = 0.02
   ): ActionService.Action[] {
     const actions: ActionService.Action[] = [];
+    const percentageMap: Map<string, number> = new Map();
     let totalPortfolioValueInTWD = 0;
     const currentHoldings: HoldingMap = holdingMap;
 
@@ -70,6 +70,9 @@ namespace RebalanceService {
       const targetValueInTWD = totalPortfolioValueInTWD * targetRatio;
       const priceInTWD = currentHoldings[ticker].currentPriceInTWD!;
 
+      const currentPercentage = currentValueInTWD / totalPortfolioValueInTWD;
+      percentageMap.set(ticker, currentPercentage);
+
       const diffValueInTWD = targetValueInTWD - currentValueInTWD;
       const quantityChange = Math.round(diffValueInTWD / priceInTWD);
 
@@ -84,22 +87,27 @@ namespace RebalanceService {
             Quantity: currentHoldings[ticker].quantity,
             CurrentValue: currentValue,
             TargetValue: 0,
-            CurrentPrice: currentPrice
+            CurrentPrice: currentPrice,
+            Difference: diffValueInTWD
           });
         }
-      } else if (Math.abs(quantityChange) * currentPrice >= minTradeValue) {
+      } else if (Math.abs(currentPercentage - targetRatio) >= minTradePercentage) {
+        const targetValue = (quantityChange + currentHoldings[ticker].quantity) * currentPrice;
         actions.push({
           Ticker: ticker,
           Action: quantityChange > 0 ? "Buy" : "Sell",
           Currency: currentHoldings[ticker].currency,
           Quantity: Math.abs(quantityChange),
           CurrentValue: currentValue,
-          TargetValue: (quantityChange + currentHoldings[ticker].quantity) * currentPrice,
-          CurrentPrice: currentPrice
+          TargetValue: targetValue,
+          CurrentPrice: currentPrice,
+          Difference: targetValue - currentValue
         });
       }
     });
 
+    AllocationService.SetCurrentPercentage(percentageMap);
+    
     return actions;
   }
 
