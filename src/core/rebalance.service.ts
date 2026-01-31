@@ -38,9 +38,9 @@ namespace RebalanceService {
       };
     });
     allocations.forEach(allocation => {
-      allocationMap[allocation.Ticker] = allocation.Percentage;
+      allocationMap[allocation.Ticker] = allocation.TargetPercentage;
     });
-    const actions = calculate(holdingMap, allocationMap, 0.02);
+    const actions = calculate(holdingMap, allocationMap, 0.01);
     return actions;
   }
 

@@ -133,7 +133,10 @@ namespace Repo {
   }
 
   function normalizeHeader(header: string): string {
-    // Target Value -> TargetValue
-    return header.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+    const trimmed = header.trim();
+    return trimmed
+      .split(/\s+/)
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join('');
   }
 }

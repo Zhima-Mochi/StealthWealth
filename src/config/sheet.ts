@@ -29,7 +29,7 @@ namespace SheetConfig {
       formats: ["TEXT", "TEXT", "QUANTITY", "TEXT", "TEXT"]
     },
     "Allocation": {
-      headers: ["Ticker", "Percentage", "Current Percentage"],
+      headers: ["Ticker", "Current Percentage", "Target Percentage"],
       formats: ["TEXT", "PERCENTAGE", "PERCENTAGE"]
     },
     "Actions": {

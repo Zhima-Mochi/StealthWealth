@@ -4,7 +4,7 @@ namespace AllocationService {
 
     export interface Allocation {
         Ticker: string;
-        Percentage: number;
+        TargetPercentage: number;
         CurrentPercentage: number;
     }
 
@@ -19,7 +19,7 @@ namespace AllocationService {
             if (!allocations.some(allocation => allocation.Ticker === asset.Ticker)) {
                 addAllocation({
                     Ticker: asset.Ticker,
-                    Percentage: 0,
+                    TargetPercentage: 0,
                     CurrentPercentage: 0
                 });
             }
@@ -28,10 +28,10 @@ namespace AllocationService {
 
     export function NormalizeAllocations(): void {
         const allocations = GetAllocations();
-        const totalPercentage = allocations.reduce((sum, current) => sum + current.Percentage, 0);
+        const totalPercentage = allocations.reduce((sum, current) => sum + current.TargetPercentage, 0);
         if (totalPercentage === 0) {return;}
         allocations.forEach(allocation => {
-            allocation.Percentage = allocation.Percentage / totalPercentage;
+            allocation.TargetPercentage = allocation.TargetPercentage / totalPercentage;
         });
         Repo.UpdateAllocations(allocations);
     }
